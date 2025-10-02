@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=MariaDB-11.2;dbname=shop_iv1_22_2',
+    'dsn' => 'mysql:host=MySQL-8.4;dbname=shop_iv1_22_2',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

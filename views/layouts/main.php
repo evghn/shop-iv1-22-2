@@ -26,6 +26,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <head>
     <title><?= Html::encode($this->title) ?></title>
+
     <?php $this->head() ?>
 </head>
 
@@ -42,7 +43,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav'],
             'items' => [
-                ['label' => 'Главная', 'url' => ['/site/index']],
+                ['label' => 'Каталог', 'url' => ['/catalog']],
                 Yii::$app->user->isGuest
                     ? ['label' => 'Регистрация', 'url' => ['/site/register']]
                     : '',
@@ -52,16 +53,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     ? ['label' => 'Личный кабинет', 'url' => ['/account']]
                     : '',
 
-                Yii::$app->user->identity?->isClient
-                    ? ['label' => 'Личный кабинет 2', 'url' => ['/account2']]
-                    : '',
 
-                ['label' => 'Панель администратора', 'url' => ['/admin']],
                 Yii::$app->user->identity?->isAdmin
                     ? ['label' => 'Панель администратора', 'url' => ['/admin']]
-                    : '',
-                Yii::$app->user->identity?->isAdmin
-                    ? ['label' => 'Панель администратора2', 'url' => ['/admin2']]
                     : '',
 
                 Yii::$app->user->isGuest
@@ -76,6 +70,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     . '</li>'
             ]
         ]);
+        ?>
+        <div>
+            <?= Html::a('<i class="fas fa-shopping-basket text-white"></i>', '/account/cart') ?>
+
+        </div>
+        <?php
         NavBar::end();
         ?>
     </header>

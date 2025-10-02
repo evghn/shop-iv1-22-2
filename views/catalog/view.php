@@ -1,7 +1,6 @@
 <?php
 
-use app\models\Category;
-use yii\bootstrap5\Html;
+use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
@@ -31,19 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            'description',
             'title',
-            'description:ntext',
             'cost',
             'amount',
-            [
-                'attribute' => 'category_id',
-                'value' => Category::getCategories()[$model->category_id]
-            ],
-            [
-                'label' => 'Изображение товара',
-                'format' => 'html',
-                'value' => Html::img('/img/' . $model->productImage->photo, ['class' => 'w-25'])
-            ]
+            'category_id',
         ],
     ]) ?>
 

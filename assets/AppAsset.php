@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -19,10 +20,13 @@ class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
+
     public $css = [
         'css/site.css',
+        "https://use.fontawesome.com/releases/v5.15.4/css/all.css",
     ];
     public $js = [
+        // "https://use.fontawesome.com/releases/v5.15.4/js/all.js",
     ];
     public $depends = [
         'yii\web\YiiAsset',

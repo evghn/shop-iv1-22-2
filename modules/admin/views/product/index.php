@@ -35,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'value' => fn($model) => '<div class="d-flex gap-3">'
                     .   (
-                        isset($model->productImages[0])
-                        ? Html::img('/img/' . $model->productImages[0]->photo, ['class' => 'w-25'])
+                        isset($model->productImage)
+                        ? Html::img('/img/' . $model->productImage->photo, ['class' => 'w-25'])
                         : ''
                     )
                     . '<span>' . $model->title . '</span>'

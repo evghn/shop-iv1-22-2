@@ -89,10 +89,31 @@ class Product extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getProductImages()
+    public function getProductImage()
     {
-        return $this->hasMany(ProductImage::class, ['product_id' => 'id']);
+        return $this->hasOne(ProductImage::class, ['product_id' => 'id']);
     }
+
+    /** 
+     * Gets query for [[CartItems]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getCartItems()
+    {
+        return $this->hasMany(CartItem::class, ['product_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[OrderItems]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderItems()
+    {
+        return $this->hasMany(OrderItem::class, ['product_id' => 'id']);
+    }
+
 
     public function upload()
     {
