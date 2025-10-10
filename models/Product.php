@@ -55,12 +55,12 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'description' => 'Description',
-            'cost' => 'Cost',
-            'amount' => 'Amount',
-            'category_id' => 'Category ID',
+            'id' => '№ товара',
+            'title' => 'Наименование',
+            'description' => 'Описание',
+            'cost' => 'Цена (₽)',
+            'amount' => 'Количество',
+            'category_id' => 'Категория',
         ];
     }
 

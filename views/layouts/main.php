@@ -4,12 +4,14 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use app\models\Cart;
 use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use yii\helpers\VarDumper;
+use yii\widgets\Pjax;
 
 AppAsset::register($this);
 
@@ -72,7 +74,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ]);
         ?>
         <div>
-            <?= Html::a('<i class="fas fa-shopping-basket text-white"></i>', '/account/cart') ?>
+            <?php if (Yii::$app->user->identity?->isClient): ?>
+                <div class="d-flex">
+                    <?= Html::a('<i class="fas fa-shopping-basket text-white"></i>', '/account/cart') ?>
+                    <div class="mx-2 text-white">(<span id="cart-items-count"><?= Cart::getCount() ?></span>)
+                    </div>
+                </div>
+            <?php endif ?>
 
         </div>
         <?php

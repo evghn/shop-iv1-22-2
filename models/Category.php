@@ -64,4 +64,9 @@ class Category extends \yii\db\ActiveRecord
             ->column()
         ;
     }
+
+    public static function getCategoryName(int $id): string
+    {
+        return static::findOne($id)->title;
+    }
 }

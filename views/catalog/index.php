@@ -19,7 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
 
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin([
+        'id' => 'catalog-pjax',
+        'enablePushState' => false,
+        'timeout' => 5000
+    ]); ?>
     <?php #$this->render('_search', ['model' => $searchModel]); 
     ?>
 
@@ -34,3 +38,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+<?php
+$this->registerJsFile('/js/catalog.js', ['depends' => 'yii\web\YiiAsset']);

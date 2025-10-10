@@ -102,6 +102,9 @@ class Cart extends \yii\db\ActiveRecord
         // VarDumper::dump($item->attributes, 10, true);
         $item->sum += $item->cost;
         $item->save();
+        $this->amount++;
+        $this->sum += $item->product->cost;
+        $this->save();
         // VarDumper::dump($item->attributes, 10, true);
         // die;
     }
@@ -114,8 +117,18 @@ class Cart extends \yii\db\ActiveRecord
         $item->sum -= $item->cost;
         $item->save();
 
+        $this->amount--;
+        $this->sum -= $item->cost;
+        $this->save();
+
         if ($item->amount === 0) {
             $item->delete();
         }
+    }
+
+
+    public static function getCount()
+    {
+        return static::findOne(['user_id' => Yii::$app->user->id])?->amount ?? 0;
     }
 }

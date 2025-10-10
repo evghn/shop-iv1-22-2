@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Category;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -13,28 +14,34 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a('В каталог', ['/catalog'], ['class' => 'btn btn-outline-primary']) ?>
+
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'description',
             'title',
+            [
+                'attribute' => 'category_id',
+                'value' => Category::getCategoryName($model->category_id),
+            ],
             'cost',
             'amount',
-            'category_id',
+            [
+                'attribute' => 'description',
+                'value' => $model->description ?? 'Не указано',
+            ],
+            [
+                'label' => 'Изображение',
+                'format' => 'html',
+                'value' => Html::img('/img/' . $model->productImage->photo, ['class' => 'w-25'])
+            ]
+
         ],
     ]) ?>
 

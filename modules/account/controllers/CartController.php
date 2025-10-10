@@ -19,20 +19,20 @@ class CartController extends Controller
     /**
      * @inheritDoc
      */
-    public function behaviors()
-    {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
-                    ],
-                ],
-            ]
-        );
-    }
+    // public function behaviors()
+    // {
+    //     return array_merge(
+    //         parent::behaviors(),
+    //         [
+    //             'verbs' => [
+    //                 'class' => VerbFilter::className(),
+    //                 'actions' => [
+    //                     'delete' => ['POST'],
+    //                 ],
+    //             ],
+    //         ]
+    //     );
+    // }
 
     /**
      * Lists all Cart models.
@@ -77,7 +77,7 @@ class CartController extends Controller
     {
         $model = Cart::findOne(['user_id' => Yii::$app->user->id]) ?? Cart::create();
         $model->addItem($product_id);
-        return $this->redirect('/account/cart');
+        return $this->asJson(true);
     }
 
 
@@ -85,7 +85,7 @@ class CartController extends Controller
     {
         $model = Cart::findOne(['user_id' => Yii::$app->user->id]);
         $model->addDec($item_id);
-        return $this->redirect('/account/cart');
+        return $this->asJson(true);
     }
 
 
@@ -95,7 +95,7 @@ class CartController extends Controller
         if ($model) {
             $model->delete();
         }
-        return $this->redirect('/account/cart');
+        return $this->asJson(true);
     }
 
     public function actionClear($id)
@@ -104,6 +104,12 @@ class CartController extends Controller
         if ($model) {
             $model->delete();
         }
-        return $this->redirect('/account/cart');
+        return true;
+    }
+
+
+    public function actionGetCount()
+    {
+        return $this->asJson(Cart::getCount());
     }
 }

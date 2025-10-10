@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Exception;
 use Yii;
 
 /**
@@ -53,12 +54,12 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'created_at' => 'Created At',
-            'user_id' => 'User ID',
-            'amount' => 'Amount',
-            'sum' => 'Sum',
-            'status_id' => 'Status ID',
+            'id' => '№ заказа',
+            'created_at' => 'Дата и время создания',
+            'user_id' => 'Клиент',
+            'amount' => 'Кол-во товаров',
+            'sum' => 'Сумма заказа',
+            'status_id' => 'Статус',
         ];
     }
 
@@ -92,4 +93,35 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+
+    public static function createOrder(int $cart_id): bool | int
+    {
+        $cart = Cart::findOne($cart_id);
+        try {
+            $order = new static();
+            $order->user_id = Yii::$app->user->id;
+            $order->amount = $cart->amount;
+            $order->sum = $cart->sum;
+            $order->status_id = Status::getStatusId('new');
+            if ($order->save()) {
+                if ($cartItems = CartItem::find()->where(['cart_id' => $cart_id])->all()) {
+
+                    foreach ($cartItems as $item) {
+                        $orderItem = new OrderItem();
+                        $orderItem->order_id = $order->id;
+                        $orderItem->load($item->attributes, '');
+                        $orderItem->save();
+                    }
+                    $cart->delete();
+                    return $order->id;
+                }
+            }
+        } catch (Exception $e) {
+            if (isset($order) && $order->id) {
+                $order->delete();
+            }
+            Yii::debug($e->getMessage());
+        }
+        return false;
+    }
 }

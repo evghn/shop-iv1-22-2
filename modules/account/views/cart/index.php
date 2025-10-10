@@ -5,6 +5,7 @@ use yii\bootstrap5\LinkPager;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
+use yii\web\JqueryAsset;
 use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
@@ -13,6 +14,7 @@ use yii\widgets\Pjax;
 
 $this->title = 'Корзина';
 $this->params['breadcrumbs'][] = $this->title;
+$cartNoEmpty = $cart && $dataProviderItems->totalCount;
 ?>
 <div class="cart-index">
 
@@ -39,15 +41,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?php endif ?>
+
     <div class="d-flex justify-content-between mt-3">
         <div>
-            <?php if ($cart && $dataProviderItems->totalCount): ?>
-                <?= Html::a('Очистить корзину', ['clear', 'id' => $cart->id], ['class' => 'btn btn-outline-danger']) ?>
-            <?php endif ?>
+            <?= $cartNoEmpty
+                ? Html::a('Очистить корзину', ['clear', 'id' => $cart->id], ['class' => 'btn btn-outline-danger cart-btn'])
+                : ""
+            ?>
         </div>
-        <?= Html::a('Продолжить покупки', ['/'], ['class' => 'btn btn-outline-primary', 'data-pjax' => 0]) ?>
+        <div class="d-flex gap-3">
+            <?= $cartNoEmpty
+                ? Html::a('Оформить заказ', ['/account/account/create', 'cart_id' => $cart->id], ['class' => 'btn btn-outline-primary'])
+                : ""
+            ?>
+            <?= Html::a('Продолжить покупки', ['/'], ['class' => 'btn btn-outline-info', 'data-pjax' => 0]) ?>
+        </div>
     </div>
-
     <?php Pjax::end(); ?>
 
 </div>
+<?php
+$this->registerJsFile('/js/cart.js', ['depends' => 'yii\web\YiiAsset']);

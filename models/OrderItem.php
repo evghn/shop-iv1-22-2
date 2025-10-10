@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "order_item".
  *
  * @property int $id
- * @property int $odrder_id
+ * @property int $order_id
  * @property int $product_id
  * @property int $amount
  * @property float $cost
@@ -37,10 +37,10 @@ class OrderItem extends \yii\db\ActiveRecord
         return [
             [['amount'], 'default', 'value' => 0],
             [['sum'], 'default', 'value' => 0.00],
-            [['odrder_id', 'product_id'], 'required'],
-            [['odrder_id', 'product_id', 'amount'], 'integer'],
+            [['order_id', 'product_id'], 'required'],
+            [['order_id', 'product_id', 'amount'], 'integer'],
             [['cost', 'sum'], 'number'],
-            [['odrder_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::class, 'targetAttribute' => ['odrder_id' => 'id']],
+            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::class, 'targetAttribute' => ['order_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
@@ -52,7 +52,7 @@ class OrderItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'odrder_id' => 'Odrder ID',
+            'order_id' => 'Odrder ID',
             'product_id' => 'Product ID',
             'amount' => 'Amount',
             'cost' => 'Cost',
@@ -67,7 +67,7 @@ class OrderItem extends \yii\db\ActiveRecord
      */
     public function getOdrder()
     {
-        return $this->hasOne(Order::class, ['id' => 'odrder_id']);
+        return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
 
     /**
@@ -79,5 +79,4 @@ class OrderItem extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
-
 }
