@@ -7,7 +7,9 @@ use yii\widgets\ListView;
 /** @var yii\web\View $this */
 /** @var app\models\Order $model */
 
-$this->title = "Заказ №" . $model->id . " от " . Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i:s');
+$time_order = Yii::$app->formatter->asDatetime($model->created_at, 'php:d.m.Y H:i:s');
+
+$this->title = "Заказ №" . $model->id . " от " . $time_order;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="order-view">
@@ -23,11 +25,18 @@ $this->title = "Заказ №" . $model->id . " от " . Yii::$app->formatter->
         'model' => $model,
         'attributes' => [
             'id',
-            'created_at',
+            [
+                'attribute' => 'created_at',
+                'value' => $time_order,
+            ],
 
             'amount',
             'sum',
-            'status_id',
+            [
+                'attribute' => 'status_id',
+                'format' => 'html',
+                'value' => "<span class=\"order-{$model->status->alias}\">" . $model->status->title . '</span>',
+            ],
             [
                 'label' => 'Cостав заказа',
                 'format' => 'html',
@@ -37,3 +46,6 @@ $this->title = "Заказ №" . $model->id . " от " . Yii::$app->formatter->
     ]) ?>
 
 </div>
+<?php
+
+$this->registerCssFile('/css/order.css');
