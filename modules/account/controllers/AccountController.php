@@ -2,10 +2,12 @@
 
 namespace app\modules\account\controllers;
 
+use app\models\Assist;
 use app\models\Cart;
 use app\models\CartItem;
 use app\models\Order;
 use app\models\OrderItem;
+use app\models\Status;
 use app\modules\account\models\OrderSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -46,9 +48,11 @@ class AccountController extends Controller
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias'])
         ]);
     }
 

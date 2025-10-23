@@ -15,7 +15,7 @@ use yii\widgets\ListView;
         'dataProvider' => $dataProviderItems,
         'itemOptions' => ['class' => 'item'],
         'layout' => "{items}",
-        'itemView' => 'item'
+        'itemView' => 'item-order'
     ],
 )
 
