@@ -1,0 +1,9 @@
+.order-new {
+  padding: 3px 10px;
+  border-radius: 7px;
+  background-color: rgb(197, 236, 197);
+}
+
+.order-item-title {
+  color: #aaa;
+}
