@@ -24,15 +24,15 @@ Yii::debug($model->dislike_count);
 
                 <div class="text-success">
                     <span
-                        class="<?= Yii::$app->user->isGuest ? 'disabled' : 'like' ?>"
-                        data-url="<?= !Yii::$app->user->isGuest
+                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient ? 'like' : 'disabled' ?>"
+                        data-url="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient
                                         ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 1])
                                         : "" ?>">👍🏻</span>
                     <?= $model->like_count ? $model->like_count : 0 ?>
                 </div>
                 <div class="text-danger">
                     <span
-                        class="<?= Yii::$app->user->isGuest ? 'disabled ' : 'dislike' ?>"
+                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient ? 'dislike' : 'disabled' ?>"
                         data-url="<?= !Yii::$app->user->isGuest
                                         ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 0])
                                         : "" ?>">👎🏻</span>
@@ -41,7 +41,7 @@ Yii::debug($model->dislike_count);
             </div>
 
             <div>
-                <?php if (!Yii::$app->user->isGuest): ?>
+                <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isClient): ?>
                     <i
                         class="far fa-heart icon-favourite <?= $favourite_color ?>"
                         data-url="<?= $favourite_id

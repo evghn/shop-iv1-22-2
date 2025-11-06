@@ -1,11 +1,8 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\account\controllers;
 
-use app\models\Product;
-use app\models\CatalogSerach;
 use app\models\Feedback;
-use app\models\UserActionProduct;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -13,9 +10,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CatalogController implements the CRUD actions for Product model.
+ * FeedbackController implements the CRUD actions for Feedback model.
  */
-class CatalogController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * @inheritDoc
@@ -36,33 +33,43 @@ class CatalogController extends Controller
     }
 
     /**
-     * Lists all Product models.
+     * Lists all Feedback models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new CatalogSerach();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Feedback::find(),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+            */
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Product model.
+     * Displays a single Feedback model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Feedback::find()
-                ->with(['user', 'product'])
-                ->where(['product_id' => $id]),
+                ->with(['product'])
+                ->where(['user_id' => Yii::$app->user->id]),
             'sort' => [
                 'defaultOrder' => [
                     'id' => SORT_DESC
@@ -72,26 +79,19 @@ class CatalogController extends Controller
                 'pageSize' => 10,
             ],
         ]);
-
-        $model = new Feedback();
-        $model->product_id = $id;
-
-
         return $this->render('view', [
-            'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
-            'model_feedback' => $model,
         ]);
     }
 
     /**
-     * Creates a new Product model.
+     * Creates a new Feedback model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Product();
+        $model = new Feedback();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -107,42 +107,60 @@ class CatalogController extends Controller
     }
 
     /**
-     * Updates an existing Product model.
+     * Updates an existing Feedback model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUserAction($product_id, $action)
+    public function actionWrite($product_id)
     {
-        if ($this->request->isAjax && $this->request->isPost) {
-            $model = UserActionProduct::findOne([
-                'product_id' => $product_id,
-                'user_id' => Yii::$app->user->id
-            ]);
+        if (!Feedback::findOne(['product_id' => $product_id, 'user_id' => Yii::$app->user->id])) {
+            $model = new Feedback();
+            $model->product_id = $product_id;
 
-            if ($model === null) {
-                $model = new UserActionProduct();
-                $model->product_id = $product_id;
-                $model->user_id = Yii::$app->user->id;
-            }
-
-            if ($model->action === null) {
-                $model->action = $action;
-            } elseif ($model->action == $action) {
-                $model->action = null;
+            if ($this->request->isPost) {
+                if ($model->load($this->request->post())) {
+                    $model->user_id = Yii::$app->user->id;
+                    if ($model->save()) {
+                        return true;
+                    }
+                }
             } else {
-                return $this->asJson(false);
+                $model->loadDefaultValues();
             }
 
-            return $this->asJson($model->save());
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
+        return $this->redirect(['/catalog/view', 'id' => $product_id]);
+    }
 
-        return $this->asJson(false);
+
+    public function actionEdit($id)
+    {
+        if ($model = $this->findModel($id)) {
+            if ($this->request->isPost) {
+                if ($model->load($this->request->post())) {
+                    $model->updated_at = date("Y-m-d H:i:s");
+                    if ($model->save()) {
+                        return $this->redirect("view");
+                    }
+                }
+            } else {
+                $model->loadDefaultValues();
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+        return $this->redirect(['view']);
     }
 
     /**
-     * Deletes an existing Product model.
+     * Deletes an existing Feedback model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -152,19 +170,19 @@ class CatalogController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['view']);
     }
 
     /**
-     * Finds the Product model based on its primary key value.
+     * Finds the Feedback model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Product the loaded model
+     * @return Feedback the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Product::findOne(['id' => $id])) !== null) {
+        if (($model = Feedback::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

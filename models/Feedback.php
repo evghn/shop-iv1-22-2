@@ -11,6 +11,8 @@ use Yii;
  * @property int $user_id
  * @property int $product_id
  * @property string $comment
+ * @property string $created_at
+ * @property string|null $updated_at
  *
  * @property Product $product
  * @property User $user
@@ -38,6 +40,7 @@ class Feedback extends \yii\db\ActiveRecord
             [['comment'], 'string'],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -50,7 +53,7 @@ class Feedback extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'product_id' => 'Product ID',
-            'comment' => 'Comment',
+            'comment' => 'Напишите отзыв...',
         ];
     }
 
@@ -73,5 +76,4 @@ class Feedback extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
-
 }

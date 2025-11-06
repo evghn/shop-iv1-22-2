@@ -1,8 +1,13 @@
 <?php
 
 use app\models\Category;
+use yii\bootstrap5\LinkPager;
+use yii\bootstrap5\Modal;
 use yii\helpers\Html;
+use yii\web\JqueryAsset;
 use yii\widgets\DetailView;
+use yii\widgets\ListView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var app\models\Product $model */
@@ -11,13 +16,18 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
 ?>
 <div class="product-view">
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <p>
+    <p class="d-flex gap-3">
         <?= Html::a('В каталог', ['/catalog'], ['class' => 'btn btn-outline-primary']) ?>
+        <?= !$model?->feedbacks
+            ? Html::a('Отзыв', ['/account/feedback/write', 'product_id' => $model->id], ['class' => 'btn btn-outline-info btn-feedback'])
+            : ""
+        ?>
 
     </p>
 
@@ -45,4 +55,41 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <div class="my-3 text-decoration-underline">
+        Отзывы о товаре
+    </div>
+
+    <?php Pjax::begin([
+        'id' => 'product-feedbacks-pjax',
+        'enablePushState' => false,
+        'timeout' => 5000
+    ]); ?>
+
+
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemOptions' => ['class' => 'item'],
+        'layout' => '{pager}<div class="d-flex flex-column gap-3">{items}</div>{pager}',
+        'itemView' => 'item_feedback',
+        'pager' => [
+            'class' => LinkPager::class,
+        ]
+
+    ]) ?>
+
+    <?php Pjax::end(); ?>
+
+
 </div>
+<?php
+Modal::begin([
+    'id' => 'modal-feedback',
+    'title' => 'Отзыв о товаре',
+    'size' => Modal::SIZE_LARGE
+]);
+
+echo $this->render("@app/modules/account/views/feedback/create", ['model' => $model_feedback]);
+
+Modal::end();
+
+$this->registerJsFile("/js/feedback.js", ['depends' => JqueryAsset::class]);
