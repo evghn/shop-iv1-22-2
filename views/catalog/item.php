@@ -9,7 +9,8 @@ $favourite_color = $favourite_id
     ? "text-danger"
     : "text-black";
 
-Yii::debug($model?->favourites);
+Yii::debug($model->like_count);
+Yii::debug($model->dislike_count);
 
 ?>
 <div class="card" style="width: 18rem;">
@@ -19,17 +20,35 @@ Yii::debug($model?->favourites);
         <h6 class="card-subtitle mb-2 text-body-secondary"><span class="text-secondary">Категория:</span> <?= $model->category->title ?></h6>
         <p class="card-text fs-bold fs-5 text-end"><?= $model->cost ?><span>₽</span></p>
         <div class="d-flex justify-content-between my-2 block-icon">
-            <div>
+            <div class="d-flex gap-3">
 
+                <div class="text-success">
+                    <span
+                        class="<?= Yii::$app->user->isGuest ? 'disabled' : 'like' ?>"
+                        data-url="<?= !Yii::$app->user->isGuest
+                                        ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 1])
+                                        : "" ?>">👍🏻</span>
+                    <?= $model->like_count ? $model->like_count : 0 ?>
+                </div>
+                <div class="text-danger">
+                    <span
+                        class="<?= Yii::$app->user->isGuest ? 'disabled ' : 'dislike' ?>"
+                        data-url="<?= !Yii::$app->user->isGuest
+                                        ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 0])
+                                        : "" ?>">👎🏻</span>
+                    <?= $model->dislike_count ? $model->dislike_count : 0 ?>
+                </div>
             </div>
+
             <div>
-                <i
-                    class="far fa-heart icon-favourite <?= $favourite_color
-                                                        ?>"
-                    data-url="<?= $favourite_id
-                                    ? Url::to(['/account/favourite/remove', 'id' => $favourite_id])
-                                    : Url::to(['/account/favourite/add', 'product_id' => $model->id]) ?>">
-                </i>
+                <?php if (!Yii::$app->user->isGuest): ?>
+                    <i
+                        class="far fa-heart icon-favourite <?= $favourite_color ?>"
+                        data-url="<?= $favourite_id
+                                        ? Url::to(['/account/favourite/remove', 'id' => $favourite_id])
+                                        : Url::to(['/account/favourite/add', 'product_id' => $model->id]) ?>">
+                    </i>
+                <?php endif ?>
             </div>
 
         </div>

@@ -9,3 +9,8 @@
 i.icon-favourite:hover {
   color: #aaa;
 }
+
+.like,
+.dislike {
+  cursor: pointer;
+}

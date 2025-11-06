@@ -22,6 +22,8 @@ class Product extends \yii\db\ActiveRecord
 {
     public $imageFile;
     public $fileName;
+    public $like_count;
+    public $dislike_count;
 
     /**
      * {@inheritdoc}
@@ -126,6 +128,17 @@ class Product extends \yii\db\ActiveRecord
         //     return $this->hasOne(Favourite::class, ['product_id' => 'id', 'user_id' => Yii::$app->user->id]);
         // }
         return $this->hasMany(Favourite::class, ['product_id' => 'id']);
+    }
+
+
+    /** 
+     * Gets query for [[UserActionProducts]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getUserActionProducts()
+    {
+        return $this->hasMany(UserActionProduct::class, ['product_id' => 'id']);
     }
 
 

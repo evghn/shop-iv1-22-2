@@ -61,6 +61,28 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
+    /**
+     * Gets query for [[Carts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCarts()
+    {
+        return $this->hasMany(Cart::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Favourites]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFavourites()
+    {
+        return $this->hasMany(Favourite::class, ['user_id' => 'id']);
+    }
+
+
     /**
      * Gets query for [[Feedbacks]].
      *
@@ -70,6 +92,27 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Feedback::class, ['user_id' => 'id']);
     }
+
+    /**
+     * Gets query for [[UserActionProducts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserActionProducts()
+    {
+        return $this->hasMany(UserActionProduct::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Orders]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this->hasMany(Order::class, ['user_id' => 'id']);
+    }
+
 
 
     public static function findIdentity($id)

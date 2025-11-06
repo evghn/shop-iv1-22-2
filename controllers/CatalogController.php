@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Product;
 use app\models\CatalogSerach;
+use app\models\UserActionProduct;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -89,17 +91,32 @@ class CatalogController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUserAction($product_id, $action)
     {
-        $model = $this->findModel($id);
+        if ($this->request->isAjax && $this->request->isPost) {
+            $model = UserActionProduct::findOne([
+                'product_id' => $product_id,
+                'user_id' => Yii::$app->user->id
+            ]);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model === null) {
+                $model = new UserActionProduct();
+                $model->product_id = $product_id;
+                $model->user_id = Yii::$app->user->id;
+            }
+
+            if ($model->action === null) {
+                $model->action = $action;
+            } elseif ($model->action == $action) {
+                $model->action = null;
+            } else {
+                return $this->asJson(false);
+            }
+
+            return $this->asJson($model->save());
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->asJson(false);
     }
 
     /**

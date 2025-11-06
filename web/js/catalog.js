@@ -29,4 +29,16 @@ $(() => {
       },
     });
   });
+
+  $("#catalog-pjax").on("click", ".like, .dislike", function (e) {
+    $.ajax({
+      url: $(this).data("url"),
+      method: "POST",
+      success(data) {
+        if (data) {
+          $.pjax.reload("#catalog-pjax");
+        }
+      },
+    });
+  });
 });
