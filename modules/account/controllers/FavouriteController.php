@@ -2,13 +2,8 @@
 
 namespace app\modules\account\controllers;
 
-use app\models\Assist;
-use app\models\Cart;
-use app\models\CartItem;
-use app\models\Order;
-use app\models\OrderItem;
-use app\models\Status;
-use app\modules\account\models\OrderSearch;
+use app\models\Favourite;
+use app\modules\account\models\FavouriteSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -16,9 +11,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AccountController implements the CRUD actions for Order model.
+ * FavouriteController implements the CRUD actions for Favourite model.
  */
-class AccountController extends Controller
+class FavouriteController extends Controller
 {
     /**
      * @inheritDoc
@@ -39,69 +34,53 @@ class AccountController extends Controller
     }
 
     /**
-     * Lists all Order models.
+     * Lists all Favourite models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new OrderSearch();
+        $searchModel = new FavouriteSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias'])
         ]);
     }
 
     /**
-     * Displays a single Order model.
+     * Displays a single Favourite model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-        $dataProviderItems = new ActiveDataProvider([
-            'query' => OrderItem::find()
-                ->where(["order_id" => $id]),
-        ]);
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'dataProviderItems' => $dataProviderItems,
         ]);
     }
 
     /**
-     * Creates a new Order model.
+     * Creates a new Favourite model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($cart_id)
+    public function actionAdd($product_id)
     {
-        $cart = Cart::findOne($cart_id);
-
-        $dataProviderItems = new ActiveDataProvider([
-            'query' => CartItem::find()
-                ->where("cart_item.cart_id = $cart_id"),
-        ]);
-
         if ($this->request->isPost) {
-            if ($orderId = Order::createOrder($cart_id)) {
-                return $this->redirect(['view', 'id' => $orderId]);
-            }
+            $model = new Favourite();
+            $model->user_id = Yii::$app->user->id;
+            $model->product_id = $product_id;
+            return $this->asJson($model->save());
         }
 
-        return $this->render('create', [
-            'cart' => $cart,
-            'dataProviderItems' => $dataProviderItems,
-        ]);
+        return $this->asJson(false);
     }
 
     /**
-     * Updates an existing Order model.
+     * Updates an existing Favourite model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -120,25 +99,31 @@ class AccountController extends Controller
         ]);
     }
 
+
+
+
     /**
-     * Deletes an existing Order model.
+     * Deletes an existing Favourite model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-
+    public function actionRemove($id)
+    {
+        return $this->asJson((bool)$this->findModel($id)->delete());
+    }
 
     /**
-     * Finds the Order model based on its primary key value.
+     * Finds the Favourite model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Order the loaded model
+     * @return Favourite the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Order::findOne(['id' => $id])) !== null) {
+        if (($model = Favourite::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

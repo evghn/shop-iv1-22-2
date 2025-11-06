@@ -2,7 +2,7 @@
 
 use app\models\Order;
 use yii\bootstrap5\LinkPager;
-use yii\helpers\Html;
+use yii\bootstrap5\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\widgets\ListView;
@@ -18,6 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="order-index">
 
     <h3 class="mb-5"><?= Html::encode($this->title) ?></h3>
+
+    <div class="my-3">
+        <?= Html::a('Избранное', '/account/favourite', ['class' => "btn btn-outline-primary"]) ?>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php # $this->render('_search', ['model' => $searchModel]); 
