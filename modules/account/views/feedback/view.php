@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var app\models\Feedback $model */
 
 $this->title = "Отзывы";
-$this->params['breadcrumbs'][] = ['label' => 'Feedbacks', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет', 'url' => ['/account']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

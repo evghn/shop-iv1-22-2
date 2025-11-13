@@ -115,26 +115,27 @@ class FeedbackController extends Controller
      */
     public function actionWrite($product_id)
     {
-        if (!Feedback::findOne(['product_id' => $product_id, 'user_id' => Yii::$app->user->id])) {
+        if (!$model = Feedback::findOne(['product_id' => $product_id, 'user_id' => Yii::$app->user->id])) {
             $model = new Feedback();
             $model->product_id = $product_id;
-
-            if ($this->request->isPost) {
-                if ($model->load($this->request->post())) {
-                    $model->user_id = Yii::$app->user->id;
-                    if ($model->save()) {
-                        return true;
-                    }
-                }
-            } else {
-                $model->loadDefaultValues();
-            }
-
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
-        return $this->redirect(['/catalog/view', 'id' => $product_id]);
+
+
+        if ($this->request->isPost) {
+
+            if ($model->load($this->request->post())) {
+                $model->user_id = Yii::$app->user->id;
+                if ($model->save()) {
+                    return true;
+                }
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
 

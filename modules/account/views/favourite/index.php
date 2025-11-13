@@ -13,6 +13,7 @@ use yii\widgets\Pjax;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Избранные товары';
+$this->params['breadcrumbs'][] = ['label' => 'Личный кабинет', 'url' => ['/account']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="favourite-index">

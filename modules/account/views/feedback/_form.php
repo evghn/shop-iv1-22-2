@@ -20,7 +20,8 @@ use yii\bootstrap5\ActiveForm;
 
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
-    <div class="form-group d-flex justify-content-end">
+    <div class="form-group d-flex justify-content-end gap-3">
+        <?= Html::a('Отменить', [""], ['class' => 'btn btn-outline-primary btn-cancel', "data-pjax" => 0]) ?>
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-outline-success']) ?>
     </div>
 

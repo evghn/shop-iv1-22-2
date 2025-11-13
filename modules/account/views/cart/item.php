@@ -6,7 +6,7 @@ use yii\bootstrap5\Html;
     <div class="card-body d-flex justify-content-between">
         <div class="d-flex">
             <?= Html::img('/img/' . $model->product->productImage->photo, ['class' => 'w-25']) ?>
-            <h5 class=""><?= Html::a($model->product->title, '') ?></h5>
+            <h5 class=""><?= Html::a($model->product->title, ["/catalog/view", "id" => $model->product->id]) ?></h5>
         </div>
         <div class="d-flex gap-3">
             <div><?= Html::a('-', ['dec', 'item_id' => $model->id], ['class' => 'text-decoration-none cart-btn', 'data-pjax' => 0]) ?></div>

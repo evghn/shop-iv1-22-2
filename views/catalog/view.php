@@ -88,6 +88,7 @@ Modal::begin([
     'size' => Modal::SIZE_LARGE
 ]);
 
+
 echo $this->render("@app/modules/account/views/feedback/create", ['model' => $model_feedback]);
 
 Modal::end();

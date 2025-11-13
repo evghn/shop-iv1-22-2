@@ -11,7 +11,10 @@ use yii\widgets\Pjax;
     <?php Pjax::begin([
         'id' => 'feedback-pjax',
         'enablePushState' => false,
-        'timeout' => 5000
+        'timeout' => 5000,
+        "options" => [
+            'data-close' => 1,
+        ]
     ]); ?>
 
     <?= $this->render('_form', [
