@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Category;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,25 +15,23 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
         'options' => [
-            'data-pjax' => 1
+            'data-pjax' => 1,
+            'class' => 'd-flex align-items-end gap-3',
+            'id' => 'form-search'
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'description') ?>
 
+
+
+    <?= $form->field($model, 'category_id')->dropDownList(Category::getCategories(), ['prompt' => "Выберете категорию"])  ?>
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'cost') ?>
-
-    <?= $form->field($model, 'amount') ?>
-
-    <?php // echo $form->field($model, 'category_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Сбросить', ['/'], ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

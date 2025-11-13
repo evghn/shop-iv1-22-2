@@ -41,4 +41,8 @@ $(() => {
       },
     });
   });
+
+  $("#catalog-pjax").on("change", "#catalogserach-category_id", function () {
+    $("#form-search").submit();
+  });
 });

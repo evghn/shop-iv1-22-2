@@ -64,6 +64,27 @@ $config = [
             'defaultRoute' => 'account',
         ],
     ],
+
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\PathController',
+            'access' => ['@'],
+            'root' => [
+
+                'baseUrl' => '@web',
+                'basePath' => '@webroot',
+                'path' => 'img',
+                'name' => 'image',
+                'plugin' => [
+                    'Sluggable' => [
+                        'lowercase' => false,
+                    ]
+                ]
+
+            ]
+        ]
+    ],
+
     'params' => $params,
 ];
 

@@ -24,13 +24,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'enablePushState' => false,
         'timeout' => 5000
     ]); ?>
-    <?php #$this->render('_search', ['model' => $searchModel]); 
-    ?>
+
+
+    <div class="d-flex align-items-end justify-content-between">
+        <div class="mb-3">
+            <?= $dataProvider->sort->link('cost') ?> |
+            <?= $dataProvider->sort->link('title') ?> |
+            <?= $dataProvider->sort->link('category_id') ?>
+
+        </div>
+        <div>
+            <?php echo $this->render('_search', ['model' => $searchModel]);  ?>
+        </div>
+    </div>
+
+
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemOptions' => ['class' => 'item'],
-        'layout' => '{pager}<div class="d-flex  flex-wrap justify-content-start gap-3">{items}</div>{pager}',
+        'layout' => '{pager}<div class="d-flex  flex-wrap justify-content-between gap-3">{items}</div>{pager}',
         'itemView' => 'item',
 
     ]) ?>

@@ -32,7 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'description:ntext',
+
+
             'cost',
             'amount',
             [
@@ -43,7 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Изображение товара',
                 'format' => 'html',
                 'value' => Html::img('/img/' . $model->productImage->photo, ['class' => 'w-25'])
+            ],
+            [
+                'attribute' => "description",
+                "format" => "html",
+                "value" => $model->description,
             ]
+
         ],
     ]) ?>
 
