@@ -52,7 +52,8 @@ class AccountController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias'])
+            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias']),
+            'status_order' => Status::getStatusesAlias(),
         ]);
     }
 
@@ -107,17 +108,18 @@ class AccountController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionChangeStatus($order_id, $status_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($order_id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->status_id = $status_id;
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->redirect('/admin');
     }
 
     /**

@@ -93,6 +93,16 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
+    /**
+     * Gets query for [[ReasonCancel]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReasonCancel()
+    {
+        return $this->hasOne(ReasonCancel::class, ['order_id' => 'id']);
+    }
+
 
     public static function createOrder(int $cart_id): bool | int
     {

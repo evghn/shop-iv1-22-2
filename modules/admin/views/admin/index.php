@@ -34,7 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= ListView::widget([
             'dataProvider' => $dataProvider,
             'itemOptions' => ['class' => 'item'],
-            'itemView' => fn($model) => $this->render('item', ['model' => $model, 'statuses' => $statuses]),
+            'itemView' => fn($model) => $this->render('item', [
+                'model' => $model,
+                'statuses' => $statuses,
+                'status_order' => $status_order
+            ]),
             'pager' => [
                 'class' => LinkPager::class
             ],

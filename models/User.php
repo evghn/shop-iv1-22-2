@@ -113,6 +113,16 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Order::class, ['user_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[ReasonCancels]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReasonCancels()
+    {
+        return $this->hasMany(ReasonCancel::class, ['user_id' => 'id']);
+    }
+
 
 
     public static function findIdentity($id)

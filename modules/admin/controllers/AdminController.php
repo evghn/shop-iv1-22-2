@@ -48,7 +48,8 @@ class AdminController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias'])
+            'statuses' => Assist::getColsItems(Status::tableName(), ['title', 'alias']),
+            'status_order' => Status::getStatusesAlias(),
         ]);
     }
 
@@ -92,26 +93,21 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Order model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id № заказа
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+    public function actionChangeStatus($order_id, $status_id)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($order_id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // var_dump($model);
+        // die;
+        if ($this->request->isPost) {
+            $model->status_id = $status_id;
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        return $this->redirect('/admin');
     }
-
     /**
      * Deletes an existing Order model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
