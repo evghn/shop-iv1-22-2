@@ -17,7 +17,6 @@ use Yii;
 class Favourite extends \yii\db\ActiveRecord
 {
 
-
     /**
      * {@inheritdoc}
      */
@@ -48,6 +47,7 @@ class Favourite extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'product_id' => 'Product ID',
+
         ];
     }
 
@@ -70,5 +70,4 @@ class Favourite extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
-
 }

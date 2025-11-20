@@ -24,7 +24,7 @@ Yii::debug($model->dislike_count);
 
                 <div class="text-success">
                     <span
-                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient ? 'like' : 'disabled' ?>"
+                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->can('canClient') ? 'like' : 'disabled' ?>"
                         data-url="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient
                                         ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 1])
                                         : "" ?>">👍🏻</span>
@@ -32,16 +32,15 @@ Yii::debug($model->dislike_count);
                 </div>
                 <div class="text-danger">
                     <span
-                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->identity->isClient ? 'dislike' : 'disabled' ?>"
+                        class="<?= !Yii::$app->user->isGuest && Yii::$app->user->can('canClient') ? 'dislike' : 'disabled' ?>"
                         data-url="<?= !Yii::$app->user->isGuest
                                         ? Url::to(['user-action', 'product_id' => $model->id, 'action' => 0])
                                         : "" ?>">👎🏻</span>
                     <?= $model->dislike_count ? $model->dislike_count : 0 ?>
                 </div>
             </div>
-
             <div>
-                <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isClient): ?>
+                <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('canClient')): ?>
                     <i
                         class="far fa-heart icon-favourite <?= $favourite_color ?>"
                         data-url="<?= $favourite_id
@@ -51,7 +50,14 @@ Yii::debug($model->dislike_count);
                 <?php endif ?>
             </div>
 
+
+
         </div>
         <?= Html::a('В корзину', ['/account/cart/add', 'product_id' => $model->id], ['class' => "btn btn-outline-primary w-100 $disabled  btn-cart-add", 'data-pjax' => 0]) ?>
+        <div>
+            <?php if (!Yii::$app->user->isGuest && Yii::$app->user->can('canAdmin')): ?>
+                <?= Html::a('Delete', ['/account/cart/add', 'product_id' => $model->id], ['class' => "btn btn-outline-primary w-100 $disabled  btn-cart-add", 'data-pjax' => 0]) ?>
+            <?php endif ?>
+        </div>
     </div>
 </div>

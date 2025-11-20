@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="my-3">
         <?= Html::a('Избранное', '/account/favourite', ['class' => "btn btn-outline-primary"]) ?>
         <?= Html::a('Мои отзывы', '/account/feedback/view', ['class' => "btn btn-outline-primary"]) ?>
+        <?= Html::a('Отправить письмо', ['mail'], ['class' => "btn btn-outline-info"]) ?>
     </div>
 
     <?php Pjax::begin(); ?>

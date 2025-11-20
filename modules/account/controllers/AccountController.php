@@ -146,4 +146,23 @@ class AccountController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionMail()
+    {
+        $data = [
+            "text" => "text mail",
+            "image" => "img/dE5V2IkPPWv6WL2ENB9r0Rk_P8Ccx2Xs_1758797626.jpg"
+
+        ];
+
+        $res = Assist::sendMail($data);
+        if ($res) {
+            Yii::$app->session->setFlash("success", "Письмо успешно отправлено!");
+        } else {
+            Yii::$app->session->setFlash("error", "Ошибка отправки письма!");
+        }
+
+        return $this->redirect("/account");
+    }
 }

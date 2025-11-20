@@ -23,11 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin([
         'id' => 'favourite-pjax',
-        'enablePushState' => false,
+        // 'enablePushState' => false,
         'timeout' => 5000
     ]); ?>
-    <?php #$this->render('_search', ['model' => $searchModel]); 
-    ?>
+    <?= $this->render('_search', ['model' => $searchModel]);    ?>
+    <div class="my-2">
+        <?= $dataProvider->sort->link("product_title") . " | " . $dataProvider->sort->link("category_title")  ?>
+
+    </div>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,

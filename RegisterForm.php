@@ -87,6 +87,10 @@ class RegisterForm extends Model
                 VarDumper::dump($user->errors, 10, true);
                 die;
             }
+            // нужно добавить следующие три строки:
+            $auth = Yii::$app->authManager;
+            $clientRole = $auth->getRole('client');
+            $auth->assign($clientRole, $user->id);
         }
         return $user ?? false;
     }

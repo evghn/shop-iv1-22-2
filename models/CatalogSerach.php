@@ -13,6 +13,7 @@ use yii\helpers\VarDumper;
  */
 class CatalogSerach extends Product
 {
+
     /**
      * {@inheritdoc}
      */
@@ -24,6 +25,9 @@ class CatalogSerach extends Product
             [['cost'], 'number'],
         ];
     }
+
+
+
 
     /**
      * {@inheritdoc}

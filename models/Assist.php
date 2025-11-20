@@ -26,4 +26,18 @@ class Assist extends Model
             ->indexBy('id')
             ->all();
     }
+
+
+    public static function sendMail($data)
+    {
+        Yii::$app->mailer->htmlLayout = "@app/mail/layouts/html";
+        return Yii::$app->mailer
+            ->compose('mail', [
+                "data" => $data
+            ])
+            ->setFrom("iv2-22-web@mail.ru")
+            ->setTo("iv2-22-web@mail.ru")
+            ->setSubject("Тестовое письмо")
+            ->send();
+    }
 }

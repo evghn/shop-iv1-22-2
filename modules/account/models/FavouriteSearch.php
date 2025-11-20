@@ -6,12 +6,18 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Favourite;
 use Yii;
+use yii\helpers\VarDumper;
 
 /**
  * FavouriteSearch represents the model behind the search form of `app\models\Favourite`.
  */
 class FavouriteSearch extends Favourite
 {
+
+    public string $search_text = "";
+    public string $category_title = "";
+    public string $product_title = "";
+
     /**
      * {@inheritdoc}
      */
@@ -19,8 +25,11 @@ class FavouriteSearch extends Favourite
     {
         return [
             [['id', 'user_id', 'product_id'], 'integer'],
+            [["search_text", "product_title", "category_title"], "safe"],
         ];
     }
+
+
 
     /**
      * {@inheritdoc}
@@ -41,15 +50,37 @@ class FavouriteSearch extends Favourite
      */
     public function search($params, $formName = null)
     {
-        $query = Favourite::find();
+        $query = Favourite::find()
+            ->joinWith(['product' => fn($q) => $q->joinWith(['category'])]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            "sort" => [
+                'attributes' => [
+                    // 'age',
+                    'product_title' => [
+                        'asc' => ['product.title' => SORT_ASC],
+                        'desc' => ['product.title' => SORT_DESC],
+                        'default' => SORT_ASC,
+                        'label' => 'Наименование товара',
+                    ],
+                    'category_title' => [
+                        'asc' => ['category.title' => SORT_ASC],
+                        'desc' => ['category.title' => SORT_DESC],
+                        'default' => SORT_ASC,
+                        'label' => 'Категория товара',
+                    ],
+
+                ],
+            ]
         ]);
 
         $this->load($params, $formName);
+
+        // var_dump($this->category_name);
+        // die;
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -64,6 +95,17 @@ class FavouriteSearch extends Favourite
             'product_id' => $this->product_id,
         ]);
 
+
+        if ($this->search_text) {
+            $query->andWhere([
+                'or',
+                ["like", "product.title", $this->search_text],
+                ["like", "category.title", $this->search_text],
+            ]);
+        }
+
+        // VarDumper::dump($dataProvider->query->createCommand()->rawSql, 10, true);
+        // die;
         return $dataProvider;
     }
 }

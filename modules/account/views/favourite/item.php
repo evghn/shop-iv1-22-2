@@ -8,8 +8,8 @@ $favourite_id = $model->id;
 $favourite_color = "text-danger";
 
 ?>
-<div class="card" style="width: 18rem;">
-    <?= Html::a(Html::img('/img/' . $model->product->productImage->photo, ['class' => "card-img-top"]), ['view', 'id' => $model->id], ['class' => 'text-decoration-none text-secondary', 'data-pjax' => 0]) ?>
+<div class="card" style="max-width: 18rem;">
+    <?= Html::a(Html::img('/img/' . $model->product->productImage->photo, ['class' => "card-img-top", "style" => "min-height: 215px"]), ['view', 'id' => $model->id], ['class' => 'text-decoration-none text-secondary', 'data-pjax' => 0]) ?>
     <div class="card-body">
         <h5 class="card-title"><?= Html::a($model->product->title, ['view', 'id' => $model->product->id], ['class' => 'text-decoration-none text-secondary product-title', 'data-pjax' => 0]) ?></h5>
         <h6 class="card-subtitle mb-2 text-body-secondary"><span class="text-secondary">Категория:</span> <?= $model->product->category->title ?></h6>
