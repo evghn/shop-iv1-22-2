@@ -80,6 +80,9 @@ $config = [
             'class' => 'app\modules\account\Module',
             'defaultRoute' => 'account',
         ],
+        'dmf' => [
+            'class' => 'app\modules\dmf\Module',
+        ],
     ],
 
     'controllerMap' => [
